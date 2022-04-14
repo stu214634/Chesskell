@@ -1,0 +1,95 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           Chess
+version:        0.2.0.0
+description:    Please see the README on GitHub at <https://github.com/stu214634/Chess#readme>
+homepage:       https://github.com/stu214634/Chess#readme
+bug-reports:    https://github.com/stu214634/Chess/issues
+author:         Stu214634
+maintainer:     stu214634@mail.uni-kiel.de
+copyright:      2022 Stu214634
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/stu214634/Chess
+
+library
+  exposed-modules:
+      BitFuncs
+      BitMasks
+      ChessIO
+      GameTree
+      Model
+      MoveApplication
+      MoveGeneration
+      Templates
+      Zobrist
+  other-modules:
+      Paths_Chess
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , hashable
+    , hashtables
+    , parallel
+    , template-haskell
+    , vector
+  default-language: Haskell2010
+
+executable Chess
+  main-is: Main.hs
+  other-modules:
+      BitFuncs
+      BitMasks
+      ChessIO
+      GameTree
+      Model
+      MoveApplication
+      MoveGeneration
+      Templates
+      Zobrist
+      Paths_Chess
+  hs-source-dirs:
+      app
+      src
+  ghc-options: -rtsopts -O2 -Wall
+  build-depends:
+      base
+    , hashable
+    , hashtables
+    , parallel
+    , template-haskell
+    , vector
+  default-language: Haskell2010
+
+test-suite Chess-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_Chess
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Chess
+    , aeson
+    , base
+    , hashable
+    , hashtables
+    , hspec
+    , hspec-wai
+    , hspec-wai-json
+    , parallel
+    , template-haskell
+    , vector
+  default-language: Haskell2010
