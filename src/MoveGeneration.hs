@@ -8,7 +8,7 @@ import Model(BitBoard (BitBoard), Move, ChessState (ChessState), getDestination)
 import Data.Word (Word64)
 import MoveApplication (getWhitePieces, getBlackPieces, getAllPieces, applyMove, getPieceBits)
 import Data.Bits (Bits(unsafeShiftL, (.|.), unsafeShiftR, (.&.), bit, complement), FiniteBits (countTrailingZeros))
-import BitMasks (genColMasks, lastBits, rookTable, bishopTable, kingTable, knightTable)
+import BitMasks (genColMasks, rookTable, bishopTable, kingTable, knightTable)
 import BitFuncs (popLSB, intToWord64, word64ToInt)
 
 $genColMasks

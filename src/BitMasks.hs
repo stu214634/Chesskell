@@ -7,34 +7,14 @@ import Language.Haskell.TH
     ( mkName, Exp, Clause(Clause), Q, Dec(FunD), Body(NormalB) )
 import Model (showBits)
 import Data.Traversable (for)
-import BitFuncs (w64Tow8L)
-import Templates (colMasksXXXXXXXX, mirrorBitsY, kingTableT, knightTableT)
-
--- | Masks out the most significant bit of every byte
-firstBitMask :: Word64
-firstBitMask = 0x7F7F7F7F7F7F7F7F
-
--- | Masks out everything except the most significant bit of every byte
-firstBits :: Word64
-firstBits = 0x8080808080808080
-
--- | Masks out the least significant bit of every byte
-lastBitMask :: Word64
-lastBitMask = 0xFEFEFEFEFEFEFEFE
-
--- | Masks out everything except the least significant bit of every byte
-lastBits :: Word64
-lastBits = 0x0101010101010101
-
--- | Masks out the bottom column of bits
-bottomRowMask :: Word64
-bottomRowMask = 0x00000000000000FF
+import Templates (colMasksXXXXXXXX, mirrorBitsY, kingTableT, knightTableT
+                 , bottomRowMask, mkTable )
 
 -- | Precomputed Masks
 genColMasks :: Q [Dec]
 genColMasks = for [0..255] mkColMaskExp
   where mkColMaskExp ith = do
-            mask <- colMasksXXXXXXXX ith
+            mask <- [| colMasksXXXXXXXX ith |]
             let name = mkName $ "colMask" ++ showBits ith 8
             return $ FunD name [Clause [] (NormalB mask) []]
 
@@ -180,138 +160,10 @@ rookTable 63 = 0b011111111000000010000000100000001000000010000000100000001000000
 rookTable _ = error "rookTable: invalid index"
 
 kingTable :: Word64 -> Word64
-kingTable 0 = $(kingTableT 0)
-kingTable 1 = $(kingTableT 1)
-kingTable 2 = $(kingTableT 2)
-kingTable 3 = $(kingTableT 3)
-kingTable 4 = $(kingTableT 4)
-kingTable 5 = $(kingTableT 5)
-kingTable 6 = $(kingTableT 6)
-kingTable 7 = $(kingTableT 7)
-kingTable 8 =  $(kingTableT 8)
-kingTable 9 =  $(kingTableT 9)
-kingTable 10 = $(kingTableT 10)
-kingTable 11 = $(kingTableT 11)
-kingTable 12 = $(kingTableT 12)
-kingTable 13 = $(kingTableT 13)
-kingTable 14 = $(kingTableT 14)
-kingTable 15 = $(kingTableT 15)
-kingTable 16 = $(kingTableT 16)
-kingTable 17 = $(kingTableT 17)
-kingTable 18 = $(kingTableT 18)
-kingTable 19 = $(kingTableT 19)
-kingTable 20 = $(kingTableT 20)
-kingTable 21 = $(kingTableT 21)
-kingTable 22 = $(kingTableT 22)
-kingTable 23 = $(kingTableT 23)
-kingTable 24 = $(kingTableT 24)
-kingTable 25 = $(kingTableT 25)
-kingTable 26 = $(kingTableT 26)
-kingTable 27 = $(kingTableT 27)
-kingTable 28 = $(kingTableT 28)
-kingTable 29 = $(kingTableT 29)
-kingTable 30 = $(kingTableT 30)
-kingTable 31 = $(kingTableT 31)
-kingTable 32 = $(kingTableT 32)
-kingTable 33 = $(kingTableT 33)
-kingTable 34 = $(kingTableT 34)
-kingTable 35 = $(kingTableT 35)
-kingTable 36 = $(kingTableT 36)
-kingTable 37 = $(kingTableT 37)
-kingTable 38 = $(kingTableT 38)
-kingTable 39 = $(kingTableT 39)
-kingTable 40 = $(kingTableT 40)
-kingTable 41 = $(kingTableT 41)
-kingTable 42 = $(kingTableT 42)
-kingTable 43 = $(kingTableT 43)
-kingTable 44 = $(kingTableT 44)
-kingTable 45 = $(kingTableT 45)
-kingTable 46 = $(kingTableT 46)
-kingTable 47 = $(kingTableT 47)
-kingTable 48 = $(kingTableT 48)
-kingTable 49 = $(kingTableT 49)
-kingTable 50 = $(kingTableT 50)
-kingTable 51 = $(kingTableT 51)
-kingTable 52 = $(kingTableT 52)
-kingTable 53 = $(kingTableT 53)
-kingTable 54 = $(kingTableT 54)
-kingTable 55 = $(kingTableT 55)
-kingTable 56 = $(kingTableT 56)
-kingTable 57 = $(kingTableT 57)
-kingTable 58 = $(kingTableT 58)
-kingTable 59 = $(kingTableT 59)
-kingTable 60 = $(kingTableT 60)
-kingTable 61 = $(kingTableT 61)
-kingTable 62 = $(kingTableT 62)
-kingTable 63 = $(kingTableT 63)
-kingTable _ = error "kingTable: invalid index"
+kingTable = $(mkTable "kingTable" kingTableT)
 
 knightTable :: Word64 -> Word64
-knightTable 0 = $(knightTableT 0)
-knightTable 1 = $(knightTableT 1)
-knightTable 2 = $(knightTableT 2)
-knightTable 3 = $(knightTableT 3)
-knightTable 4 = $(knightTableT 4)
-knightTable 5 = $(knightTableT 5)
-knightTable 6 = $(knightTableT 6)
-knightTable 7 = $(knightTableT 7)
-knightTable 8 =  $(knightTableT 8)
-knightTable 9 =  $(knightTableT 9)
-knightTable 10 = $(knightTableT 10)
-knightTable 11 = $(knightTableT 11)
-knightTable 12 = $(knightTableT 12)
-knightTable 13 = $(knightTableT 13)
-knightTable 14 = $(knightTableT 14)
-knightTable 15 = $(knightTableT 15)
-knightTable 16 = $(knightTableT 16)
-knightTable 17 = $(knightTableT 17)
-knightTable 18 = $(knightTableT 18)
-knightTable 19 = $(knightTableT 19)
-knightTable 20 = $(knightTableT 20)
-knightTable 21 = $(knightTableT 21)
-knightTable 22 = $(knightTableT 22)
-knightTable 23 = $(knightTableT 23)
-knightTable 24 = $(knightTableT 24)
-knightTable 25 = $(knightTableT 25)
-knightTable 26 = $(knightTableT 26)
-knightTable 27 = $(knightTableT 27)
-knightTable 28 = $(knightTableT 28)
-knightTable 29 = $(knightTableT 29)
-knightTable 30 = $(knightTableT 30)
-knightTable 31 = $(knightTableT 31)
-knightTable 32 = $(knightTableT 32)
-knightTable 33 = $(knightTableT 33)
-knightTable 34 = $(knightTableT 34)
-knightTable 35 = $(knightTableT 35)
-knightTable 36 = $(knightTableT 36)
-knightTable 37 = $(knightTableT 37)
-knightTable 38 = $(knightTableT 38)
-knightTable 39 = $(knightTableT 39)
-knightTable 40 = $(knightTableT 40)
-knightTable 41 = $(knightTableT 41)
-knightTable 42 = $(knightTableT 42)
-knightTable 43 = $(knightTableT 43)
-knightTable 44 = $(knightTableT 44)
-knightTable 45 = $(knightTableT 45)
-knightTable 46 = $(knightTableT 46)
-knightTable 47 = $(knightTableT 47)
-knightTable 48 = $(knightTableT 48)
-knightTable 49 = $(knightTableT 49)
-knightTable 50 = $(knightTableT 50)
-knightTable 51 = $(knightTableT 51)
-knightTable 52 = $(knightTableT 52)
-knightTable 53 = $(knightTableT 53)
-knightTable 54 = $(knightTableT 54)
-knightTable 55 = $(knightTableT 55)
-knightTable 56 = $(knightTableT 56)
-knightTable 57 = $(knightTableT 57)
-knightTable 58 = $(knightTableT 58)
-knightTable 59 = $(knightTableT 59)
-knightTable 60 = $(knightTableT 60)
-knightTable 61 = $(knightTableT 61)
-knightTable 62 = $(knightTableT 62)
-knightTable 63 = $(knightTableT 63)
-knightTable _ = error "knightTable: invalid index"
+knightTable = $(mkTable "knightTable" knightTableT)
 
 whiteKnightPunishment :: Word64
 whiteKnightPunishment = 0x00008181818181FF
